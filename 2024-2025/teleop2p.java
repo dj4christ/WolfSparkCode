@@ -65,6 +65,13 @@ public class Teleop extends LinearOpMode {
             leftPower = gamepad1.left_stick_y / 5;
             rightPower = gamepad1.right_stick_y / 5;
 
+            extendorPower = gamepad2.left_stick_y / 20;
+            armPower = gamepad2.right_stick_y / 20;
+
+            extenderMotor.setPower(extendorPower);
+            armMotor.setPower(armPower);
+
+
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
             
