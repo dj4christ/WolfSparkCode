@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="Teleop1p", group="Linear OpMode")
 
-public class Teleop extends LinearOpMode {
+public class Teleop1p extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -106,6 +106,6 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
             telemetry.addData("Servo", "power (%.2f)", continuousRotationServo.getPower());
             telemetry.update();
-        }
-    }
+        }
+    }
 }
