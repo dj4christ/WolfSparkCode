@@ -45,12 +45,11 @@ public class autonomous extends LinearOpMode {
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
         leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        
+
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setPower(0.5);
-        extenderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        extenderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         extenderMotor.setDirection(DcMotor.Direction.REVERSE);
-        extenderMotor.setPower(0.7);
 
         waitForStart();
         runtime.reset();
@@ -58,6 +57,41 @@ public class autonomous extends LinearOpMode {
         while (opModeIsActive()) {
             clawServo.setPosition(0);
             rotateHandServo.setPosition(normalRotation);
+
+            armMotor.setPosition(600);
+
+            leftDrive.setPower(0.3);
+            rightDrive.setPower(0.3);
+
+            sleep(2000);
+
+            leftDrive.setPower(0);
+            rightDrive.setPower(0);
+
+            armMotor.setMode(RUN_WITHOUT_ENCODER);
+            armMotor.setPower(0.1);
+
+            leftDrive.setPower(-0.4);
+            rightDrive.setPower(-0.4);
+
+            extenderMotor.setPower(-0.5);
+
+            sleep(3000);
+
+            armMotor.setPower(-0.5);
+
+            leftDrive.setPower(0);
+            rightDrive.setPower(0);
+
+            extenderMotor.setMode(RUN_TO_POSITION);
+            extenderMotor.setPosition(0);
+
+            sleep(3000);
+            destroy();
+
+
+
+
 
 
             // leftPower = gamepad1.left_stick_y / 5;
