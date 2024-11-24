@@ -29,9 +29,6 @@ public class Teleop2p extends LinearOpMode {
 
     double normalRotation = 0.55;
     double extendedRotation = 0.81;
-    
-    // float extendorPower;
-    // float armPower;
 
     @Override
     public void runOpMode() {
@@ -69,14 +66,6 @@ public class Teleop2p extends LinearOpMode {
             rightPower = gamepad1.right_stick_y / 5;
             armPower = -gamepad2.left_stick_y / 3;
             extendorPower = gamepad2.right_stick_y / 3;
-            
-            
-
-            // extendorPower = gamepad2.left_stick_y / 20;
-            // armPower = gamepad2.right_stick_y / 20;
-
-            // extenderMotor.setTargetPosition(extenderMotor.getTargetPosition() + extendorPower);
-            // armMotor.setTargetPosition(armMotor.getTargetPosition() + armPower);
 
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
@@ -105,20 +94,6 @@ public class Teleop2p extends LinearOpMode {
             } else if(gamepad2.right_trigger > 0.5) {
                 rotateHandServo.setPosition(normalRotation);
             }
-
-            // if(gamepad1.a) {
-            //     armMotor.setTargetPosition(0);
-            //     armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            // } else if(gamepad1.b) {
-            //     armMotor.setTargetPosition(500);
-            //     armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            // } else if(gamepad1.x) {
-            //     armMotor.setTargetPosition(2000);
-            //     armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            // } else if(gamepad1.y) {
-            //     armMotor.setTargetPosition(1800);
-            //     armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            // }
 
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);

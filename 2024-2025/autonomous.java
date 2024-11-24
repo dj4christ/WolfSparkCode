@@ -1,6 +1,7 @@
 package org.firstinspires.ftc;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,6 +15,9 @@ public class Autonomous2 extends LinearOpMode {
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor armMotor = null;
+    private Servo clawServo = null;
+    private DcMotor extendMotor = null;
+    private Servo rotateClaw = null;
 
     private ElapsedTime runtime = new ElapsedTime();
     
@@ -28,38 +32,75 @@ public class Autonomous2 extends LinearOpMode {
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         armMotor = hardwareMap.get(DcMotor.class, "arm_motor");
+        clawServo = hardwareMap.get(Servo.class, "claw_servo");
+        extendMotor = hardwareMap.get(DcMotor.class, "extender_motor");
+        rotateClaw = hardwareMap.get(Servo.class, "rotate_servo");
+        
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        extendMotor.setDirection(DcMotor.Direction.REVERSE);
         
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        extendMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        extendMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         
         telemetry.addData("Starting at",  "%7d :%7d :%7d",
                           leftDrive.getCurrentPosition(),
                           rightDrive.getCurrentPosition(),
                           armMotor.getCurrentPosition());
         telemetry.update();
-
+        
+        rotateClaw.setPosition(0.45);
+        clawServo.setPosition(0.4);
         waitForStart();
-
-        encoderDrive(0.1, 5, 5, 1.5);
-        encoderDrive(0.1, -0.2, -0.2, 0.07);
-        // encoderDrive(0.2, 5, 5, 0.5);
+        
+        moveArm(0.5, 14, 1.5);
+        encoderDrive(0.09, 2.5, 2.5, 1.7);
+        //extendArm(0.2, 1, 1.5);
+        moveArm(0.3, -10, 1.5);
+        clawServo.setPosition(0.9);
+        //extendArm(0.2, -3, 0.5);
+        //encoderDrive(0.1, -0.3, -0.3, 0.07);
+        //moveArm(0.5, 7, 2);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);
     }
+    public void extendArm(double speed,double extendInches,double timeoutS) {
+        int newExtendTarget;
+
+        if (opModeIsActive()) {
+            newExtendTarget = extendMotor.getCurrentPosition() + (int)(extendInches * COUNTS_PER_INCH);
+            extendMotor.setTargetPosition(newExtendTarget);
+            extendMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            
+            runtime.reset();
+            
+            extendMotor.setPower(Math.abs(speed));
+            while (opModeIsActive() && (runtime.seconds() < timeoutS) && extendMotor.isBusy()) {
+                telemetry.addData("Currently at",  " at %7d", extendMotor.getCurrentPosition());
+                telemetry.update();
+            }
+
+            extendMotor.setPower(0);
+
+            extendMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            sleep(250);
+        }
+    }
     public void moveArm(double speed,double liftInches,double timeoutS) {
         int newArmTarget;
 
         if (opModeIsActive()) {
-            newArmTarget = leftDrive.getCurrentPosition() + (int)(liftInches * COUNTS_PER_INCH);
+            newArmTarget = armMotor.getCurrentPosition() + (int)(liftInches * COUNTS_PER_INCH);
             armMotor.setTargetPosition(newArmTarget);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             
