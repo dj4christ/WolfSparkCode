@@ -17,7 +17,6 @@ public class Teleop2p extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
-    private CRServo continuousRotationServo = null;
     private Servo rotateHandServo = null;
     private DcMotor armMotor = null;
     private DcMotor extenderMotor;
@@ -25,12 +24,14 @@ public class Teleop2p extends LinearOpMode {
 
     double leftPower;
     double rightPower;
+    double armPower;
+    double extendorPower;
 
     double normalRotation = 0.55;
     double extendedRotation = 0.81;
     
-    double extendorPower = 0;
-    double armPower = 0;
+    // float extendorPower;
+    // float armPower;
 
     @Override
     public void runOpMode() {
@@ -40,13 +41,12 @@ public class Teleop2p extends LinearOpMode {
 
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-        continuousRotationServo = hardwareMap.get(CRServo.class, "spinning_servo");
         rotateHandServo = hardwareMap.get(Servo.class, "rotate_servo");
         armMotor = hardwareMap.get(DcMotor.class, "arm_motor");
         extenderMotor = hardwareMap.get(DcMotor.class, "extender_motor");
-        clawServo = hardwareMap.get(Servo.class, "hand_servo");
+        clawServo = hardwareMap.get(Servo.class, "claw_servo");
         
-        clawServo.setPosition(0);
+        clawServo.setPosition(0.5);
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -54,35 +54,43 @@ public class Teleop2p extends LinearOpMode {
         leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setPower(0.5);
+        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         
-        extenderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        extenderMotor.setDirection(DcMotor.Direction.REVERSE);
-        extenderMotor.setPower(0.7);
+        extenderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
         runtime.reset();
 
         while (opModeIsActive()) {
+            armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            extenderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            
             leftPower = gamepad1.left_stick_y / 5;
             rightPower = gamepad1.right_stick_y / 5;
+            armPower = -gamepad2.left_stick_y / 3;
+            extendorPower = gamepad2.right_stick_y / 3;
+            
+            
 
-            extendorPower = gamepad2.left_stick_y / 20;
-            armPower = gamepad2.right_stick_y / 20;
+            // extendorPower = gamepad2.left_stick_y / 20;
+            // armPower = gamepad2.right_stick_y / 20;
 
-            extenderMotor.setPower(extendorPower);
-            armMotor.setPower(armPower);
-
+            // extenderMotor.setTargetPosition(extenderMotor.getTargetPosition() + extendorPower);
+            // armMotor.setTargetPosition(armMotor.getTargetPosition() + armPower);
 
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
+            armMotor.setPower(armPower);
+            extenderMotor.setPower(extendorPower);
+            
+            armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            extenderMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             
             // Claw code
             if(gamepad2.dpad_up) {
-                clawServo.setPosition(0);
+                clawServo.setPosition(0.5);
             } else if(gamepad2.dpad_down) {
-                clawServo.setPosition(0.33);
+                clawServo.setPosition(0);
             }
             if(gamepad2.dpad_left) {
                 extenderMotor.setTargetPosition(1400);
@@ -92,29 +100,28 @@ public class Teleop2p extends LinearOpMode {
                 extenderMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }
 
-            if(gamepad1.left_trigger > 0.5) {
+            if(gamepad2.left_trigger > 0.5) {
                 rotateHandServo.setPosition(extendedRotation);
-            } else if(gamepad1.right_trigger > 0.5) {
+            } else if(gamepad2.right_trigger > 0.5) {
                 rotateHandServo.setPosition(normalRotation);
             }
 
-            if(gamepad1.a) {
-                armMotor.setTargetPosition(0);
-                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            } else if(gamepad1.b) {
-                armMotor.setTargetPosition(500);
-                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            } else if(gamepad1.x) {
-                armMotor.setTargetPosition(2000);
-                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            } else if(gamepad1.y) {
-                armMotor.setTargetPosition(1800);
-                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            }
+            // if(gamepad1.a) {
+            //     armMotor.setTargetPosition(0);
+            //     armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            // } else if(gamepad1.b) {
+            //     armMotor.setTargetPosition(500);
+            //     armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            // } else if(gamepad1.x) {
+            //     armMotor.setTargetPosition(2000);
+            //     armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            // } else if(gamepad1.y) {
+            //     armMotor.setTargetPosition(1800);
+            //     armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            // }
 
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-            telemetry.addData("Servo", "power (%.2f)", continuousRotationServo.getPower());
             telemetry.update();
         }
     }

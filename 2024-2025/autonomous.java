@@ -1,145 +1,118 @@
 package org.firstinspires.ftc;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="Autonomous", group="Linear OpMode")
+@Autonomous(name="Autonomous1", group="Robot")
 
-public class autonomous extends LinearOpMode {
+public class Autonomous2 extends LinearOpMode {
 
-    // Declare OpMode members.
-    private ElapsedTime runtime = new ElapsedTime();
+    /* Declare OpMode members. */
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
-    private CRServo continuousRotationServo = null;
-    private Servo rotateHandServo = null;
     private DcMotor armMotor = null;
-    private DcMotor extenderMotor;
-    private Servo clawServo = null;
 
-    double normalRotation = 0.55;
-    double extendedRotation = 0.81;
+    private ElapsedTime runtime = new ElapsedTime();
+    
+    static final double COUNTS_PER_MOTOR_REV    = 1440;
+    static final double DRIVE_GEAR_REDUCTION    = 1.0;
+    static final double WHEEL_DIAMETER_INCHES   = 4.0;
+    static final double COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+                                                      (WHEEL_DIAMETER_INCHES * 3.1415);
 
     @Override
     public void runOpMode() {
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-
-
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-        continuousRotationServo = hardwareMap.get(CRServo.class, "spinning_servo");
-        rotateHandServo = hardwareMap.get(Servo.class, "rotate_servo");
         armMotor = hardwareMap.get(DcMotor.class, "arm_motor");
-        extenderMotor = hardwareMap.get(DcMotor.class, "extender_motor");
-        clawServo = hardwareMap.get(Servo.class, "hand_servo");
+        leftDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightDrive.setDirection(DcMotor.Direction.REVERSE);
         
-        
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setPower(0.5);
-        extenderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        extenderMotor.setDirection(DcMotor.Direction.REVERSE);
+        armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        
+        telemetry.addData("Starting at",  "%7d :%7d :%7d",
+                          leftDrive.getCurrentPosition(),
+                          rightDrive.getCurrentPosition(),
+                          armMotor.getCurrentPosition());
+        telemetry.update();
 
         waitForStart();
-        runtime.reset();
 
-        while (opModeIsActive()) {
-            clawServo.setPosition(0);
-            rotateHandServo.setPosition(normalRotation);
+        encoderDrive(0.1, 5, 5, 1.5);
+        encoderDrive(0.1, -0.2, -0.2, 0.07);
+        // encoderDrive(0.2, 5, 5, 0.5);
 
-            armMotor.setPosition(600);
+        telemetry.addData("Path", "Complete");
+        telemetry.update();
+        sleep(1000);
+    }
+    public void moveArm(double speed,double liftInches,double timeoutS) {
+        int newArmTarget;
 
-            leftDrive.setPower(0.3);
-            rightDrive.setPower(0.3);
-
-            sleep(2000);
-
-            leftDrive.setPower(0);
-            rightDrive.setPower(0);
-
-            armMotor.setMode(RUN_WITHOUT_ENCODER);
-            armMotor.setPower(0.1);
-
-            leftDrive.setPower(-0.4);
-            rightDrive.setPower(-0.4);
-
-            extenderMotor.setPower(-0.5);
-
-            sleep(3000);
-
-            armMotor.setPower(-0.5);
-
-            leftDrive.setPower(0);
-            rightDrive.setPower(0);
-
-            extenderMotor.setMode(RUN_TO_POSITION);
-            extenderMotor.setPosition(0);
-
-            sleep(3000);
-            destroy();
-
-
-
-
-
-
-            // leftPower = gamepad1.left_stick_y / 5;
-            // rightPower = gamepad1.right_stick_y / 5;
-
-            // extendorPower = gamepad2.left_stick_y / 20;
-            // armPower = gamepad2.right_stick_y / 20;
-
-            // extenderMotor.setPower(extendorPower);
-            // armMotor.setPower(armPower);
-
-
-            // leftDrive.setPower(leftPower);
-            // rightDrive.setPower(rightPower);
+        if (opModeIsActive()) {
+            newArmTarget = leftDrive.getCurrentPosition() + (int)(liftInches * COUNTS_PER_INCH);
+            armMotor.setTargetPosition(newArmTarget);
+            armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             
-            // // Claw code
-            // if(gamepad2.dpad_up) {
-            //     clawServo.setPosition(0);
-            // } else if(gamepad2.dpad_down) {
-            //     clawServo.setPosition(0.33);
-            // }
-            // if(gamepad2.dpad_left) {
-            //     extenderMotor.setTargetPosition(1400);
-            //     extenderMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            // } else if(gamepad2.dpad_right) {
-            //     extenderMotor.setTargetPosition(0);
-            //     extenderMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            // }
+            runtime.reset();
+            
+            armMotor.setPower(Math.abs(speed));
+            while (opModeIsActive() && (runtime.seconds() < timeoutS) && armMotor.isBusy()) {
+                telemetry.addData("Currently at",  " at %7d", armMotor.getCurrentPosition());
+                telemetry.update();
+            }
 
-            // if(gamepad2.left_trigger > 0.5) {
-            //     rotateHandServo.setPosition(extendedRotation);
-            // } else if(gamepad2.right_trigger > 0.5) {
-            //     rotateHandServo.setPosition(normalRotation);
-            // }
+            armMotor.setPower(0);
 
-            // if(gamepad1.a) {
-            //     armMotor.setTargetPosition(0);
-            //     armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            // } else if(gamepad1.b) {
-            //     armMotor.setTargetPosition(500);
-            //     armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            // } else if(gamepad1.x) {
-            //     armMotor.setTargetPosition(2000);
-            //     armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            // } else if(gamepad1.y) {
-            //     armMotor.setTargetPosition(1800);
-            //     armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            // }
+            armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            sleep(250);
+        }
+    }
+    public void encoderDrive(double speed,double leftInches,double rightInches,double timeoutS) {
+        int newLeftTarget;
+        int newRightTarget;
+
+        if (opModeIsActive()) {
+            newLeftTarget = leftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newRightTarget = rightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            
+            leftDrive.setTargetPosition(newLeftTarget);
+            rightDrive.setTargetPosition(newRightTarget);
+            
+            leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            
+            runtime.reset();
+            
+            leftDrive.setPower(Math.abs(speed));
+            rightDrive.setPower(Math.abs(speed));
+            while (opModeIsActive() &&
+                   (runtime.seconds() < timeoutS) &&
+                   (leftDrive.isBusy() && rightDrive.isBusy())) {
+
+                telemetry.addData("Running to",  " %7d :%7d", newLeftTarget,  newRightTarget);
+                telemetry.addData("Currently at",  " at %7d :%7d",
+                                            leftDrive.getCurrentPosition(), rightDrive.getCurrentPosition());
+                telemetry.update();
+            }
+
+            leftDrive.setPower(0);
+            rightDrive.setPower(0);
+
+            leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            sleep(250);
         }
     }
 }
