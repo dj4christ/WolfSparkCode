@@ -20,14 +20,15 @@ public class Teleop2p extends LinearOpMode {
     private Servo rotateHandServo = null;
     private DcMotor armMotor = null;
     private DcMotor extenderMotor;
-    private Servo clawServo = null;
+    private CRServo clawServo = null;
 
     double leftPower;
     double rightPower;
     double armPower;
     double extendorPower;
+    double clawPower;
 
-    double normalRotation = 0.55;
+    double normalRotation = 0.45;
     double extendedRotation = 0.81;
 
     @Override
@@ -41,9 +42,7 @@ public class Teleop2p extends LinearOpMode {
         rotateHandServo = hardwareMap.get(Servo.class, "rotate_servo");
         armMotor = hardwareMap.get(DcMotor.class, "arm_motor");
         extenderMotor = hardwareMap.get(DcMotor.class, "extender_motor");
-        clawServo = hardwareMap.get(Servo.class, "claw_servo");
-        
-        clawServo.setPosition(0.5);
+        clawServo = hardwareMap.get(CRServo.class, "claw_servo");
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -66,32 +65,26 @@ public class Teleop2p extends LinearOpMode {
             rightPower = gamepad1.right_stick_y / 5;
             armPower = -gamepad2.left_stick_y / 3;
             extendorPower = gamepad2.right_stick_y / 3;
+            clawPower = (gamepad2.right_trigger / 3) + (-gamepad2.left_trigger / 3);
 
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
             armMotor.setPower(armPower);
             extenderMotor.setPower(extendorPower);
+            clawServo.setPower(clawPower);
             
             armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             extenderMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             
-            // Claw code
-            if(gamepad2.dpad_up) {
-                clawServo.setPosition(0.5);
-            } else if(gamepad2.dpad_down) {
-                clawServo.setPosition(0);
-            }
-            if(gamepad2.dpad_left) {
-                extenderMotor.setTargetPosition(1400);
-                extenderMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            } else if(gamepad2.dpad_right) {
-                extenderMotor.setTargetPosition(0);
-                extenderMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            }
+            // if(gamepad2.dpad_up) {
+            //     clawServo.setPosition(0.5);
+            // } else if(gamepad2.dpad_down) {
+            //     clawServo.setPosition(0);
+            // }
 
-            if(gamepad2.left_trigger > 0.5) {
+            if(gamepad2.dpad_left) {
                 rotateHandServo.setPosition(extendedRotation);
-            } else if(gamepad2.right_trigger > 0.5) {
+            } else if(gamepad2.dpad_right) {
                 rotateHandServo.setPosition(normalRotation);
             }
 

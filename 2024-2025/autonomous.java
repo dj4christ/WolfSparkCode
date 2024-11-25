@@ -9,9 +9,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="Autonomous1", group="Robot")
 
-public class Autonomous2 extends LinearOpMode {
+public class Autonomous1 extends LinearOpMode {
 
-    /* Declare OpMode members. */
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor armMotor = null;
@@ -61,13 +60,18 @@ public class Autonomous2 extends LinearOpMode {
         waitForStart();
         
         moveArm(0.5, 14, 1.5);
+        extendArm(0.2, 2.5, 1.2);
         encoderDrive(0.09, 2.5, 2.5, 1.7);
-        //extendArm(0.2, 1, 1.5);
+        sleep(2000);
         moveArm(0.3, -10, 1.5);
-        clawServo.setPosition(0.9);
-        //extendArm(0.2, -3, 0.5);
-        //encoderDrive(0.1, -0.3, -0.3, 0.07);
-        //moveArm(0.5, 7, 2);
+        clawServo.setPosition(0.3);
+        encoderDrive(0.09, -1.6, -1.6, 1.2);
+        //sleep(2000);
+        //encoderDrive(0.12, 0.8, -0.8, 1.3);
+        // sleep(2000);
+        // encoderDrive(0.09, 1, 1, 1.5);
+        // extendArm(0.2, -2.5, 1.5);
+        // moveArm(0.5, -14, 1.5);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
