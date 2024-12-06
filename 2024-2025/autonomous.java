@@ -16,7 +16,7 @@ public class Autonomous1 extends LinearOpMode {
     private DcMotor armMotor = null;
     private Servo clawServo = null;
     private DcMotor extendMotor = null;
-    private Servo rotateClaw = null;
+    private CRServo rotateClaw = null;
 
     private ElapsedTime runtime = new ElapsedTime();
     
@@ -33,7 +33,7 @@ public class Autonomous1 extends LinearOpMode {
         armMotor = hardwareMap.get(DcMotor.class, "arm_motor");
         clawServo = hardwareMap.get(Servo.class, "claw_servo");
         extendMotor = hardwareMap.get(DcMotor.class, "extender_motor");
-        rotateClaw = hardwareMap.get(Servo.class, "rotate_servo");
+        rotateClaw = hardwareMap.get(CRServo.class, "rotate_servo");
         
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -55,7 +55,6 @@ public class Autonomous1 extends LinearOpMode {
                           armMotor.getCurrentPosition());
         telemetry.update();
         
-        rotateClaw.setPosition(0.45);
         clawServo.setPosition(0.4);
         waitForStart();
         
