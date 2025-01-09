@@ -55,20 +55,20 @@ public class Autonomous1 extends LinearOpMode {
                           armMotor.getCurrentPosition());
         telemetry.update();
         
-        clawServo.setPosition(0.5);
+        clawServo.setPosition(0.95);
         rotateClaw.setPosition(0.68);
         
         waitForStart();
         
-        moveArm(0.5, 14, 1.5);
-        //extendArm(0.1, 2.5, 1.2);
-        encoderDrive(0.06, 1.7, 1.7, 1.7);
+        moveArm(0.8, 17, 1.5);
+        //extendArm(0.5, 2.5, 1.2);
+        encoderDrive(0.05, 1.7, 1.7, 1.7);
         sleep(2000);
         moveArm(0.3, -10, 1.5);
         clawServo.setPosition(0);
-        encoderDrive(0.06, -1, -1, 1.2);
+        encoderDrive(0.04, -1, -1, 1.2);
         sleep(2000);
-        encoderDrive(0.14, 0.8, -0.8, 1.3);
+        encoderDrive(0.09, 0.9, -0.9, 1.4);
         sleep(2000);
         encoderDrive(0.07, 1, 1, 1.5);
         // extendArm(0.2, -2.5, 1.5);
