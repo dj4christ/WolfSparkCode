@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="Autonomous1", group="Robot")
+@Autonomous(name="Clip and Park", group="Robot")
 
-public class Autonomous1 extends LinearOpMode {
+public class Clip_and_park extends LinearOpMode {
 
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
@@ -17,6 +17,8 @@ public class Autonomous1 extends LinearOpMode {
     private Servo clawServo = null;
     private DcMotor extendMotor = null;
     private Servo rotateClaw = null;
+    private Servo handServo = null;
+    private Servo rotateHandServo = null;
 
     private ElapsedTime runtime = new ElapsedTime();
     
@@ -34,6 +36,8 @@ public class Autonomous1 extends LinearOpMode {
         clawServo = hardwareMap.get(Servo.class, "claw_servo");
         extendMotor = hardwareMap.get(DcMotor.class, "extender_motor");
         rotateClaw = hardwareMap.get(Servo.class, "rotate_servo");
+        handServo = hardwareMap.get(Servo.class, "hand_servo");
+        rotateHandServo = hardwareMap.get(Servo.class, "rotate_servo");
         
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -55,24 +59,34 @@ public class Autonomous1 extends LinearOpMode {
                           armMotor.getCurrentPosition());
         telemetry.update();
         
-        clawServo.setPosition(0.95);
-        rotateClaw.setPosition(0.68);
+        clawServo.setPosition(0);
         
         waitForStart();
         
-        moveArm(0.8, 17, 1.5);
-        //extendArm(0.5, 2.5, 1.2);
+        // Hand Servo moves hand vertically
+        handServo.setPosition(0.7);
+        sleep(2000);
+        rotateHandServo.setPosition(0.65);
+        
+        // Moves arm to horizontal bar height
+        moveArm(0.83, 13, 1.5);
+        //Moves drive-train
         encoderDrive(0.05, 1.7, 1.7, 1.7);
-        sleep(2000);
-        moveArm(0.3, -10, 1.5);
-        clawServo.setPosition(0);
+        sleep(1000);
+        // Following section of code for adjusting claw height before clipping. Fiddle
+        //extendMotor.setPower(0.3);
+        //sleep(200);
+        //extendMotor.setPower(0);
+        moveArm(0.75, -10, 1.5);
+        // Opens claw, 0 being base
+        clawServo.setPosition(0.2);
+        // Moves robot back(Slightly)
         encoderDrive(0.04, -1, -1, 1.2);
+        sleep(1500);
+        // Turn the robot
+        encoderDrive(0.163, 1.1, -1.1, 1.4);
         sleep(2000);
-        encoderDrive(0.09, 0.9, -0.9, 1.4);
-        sleep(2000);
-        encoderDrive(0.07, 1, 1, 1.5);
-        // extendArm(0.2, -2.5, 1.5);
-        // moveArm(0.5, -14, 1.5);
+        encoderDrive(0.09, 1.1, 1.1, 1.5);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
