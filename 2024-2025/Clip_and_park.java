@@ -84,9 +84,9 @@ public class Clip_and_park extends LinearOpMode {
         encoderDrive(0.04, -1, -1, 1.2);
         sleep(1500);
         // Turn the robot
-        encoderDrive(0.163, 1.1, -1.1, 1.4);
+        encoderDrive(0.05, -1.1, 1.1, 1.4);
         sleep(2000);
-        encoderDrive(0.09, 1.1, 1.1, 1.5);
+        encoderDrive(0.09, -1.1, -1.1, 1.5);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
