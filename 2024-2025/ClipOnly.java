@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="Clip and Park", group="Robot")
+@Autonomous(name="ClipOnly", group="Robot")
 
-public class Clip_and_park extends LinearOpMode {
+public class ClipOnly extends LinearOpMode {
 
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
@@ -62,7 +62,6 @@ public class Clip_and_park extends LinearOpMode {
         // Hand Servo moves hand vertically
         handServo.setPosition(0.65);
         
-        
         // Moves arm to horizontal bar height
         encoderDrive(0.06, 0.2, 0.2, 0.4);
         moveArm(0.88, 13.5, 1.55);
@@ -80,10 +79,6 @@ public class Clip_and_park extends LinearOpMode {
         encoderDrive(0.04, -1, -1, 1.2);
         sleep(1500);
         moveArm(0.6, -5, 1.55);
-        // Turn the robot
-        encoderDrive(0.07, 2, -2, 1.4);
-        sleep(2000);
-        encoderDrive(0.09, 1.1, 1.1, 1.5);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

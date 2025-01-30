@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="Clip and Park", group="Robot")
+@Autonomous(name="TwoClipWithoutFetch", group="Robot")
 
-public class Clip_and_park extends LinearOpMode {
+public class TwoClipWithoutFetch extends LinearOpMode {
 
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
@@ -55,35 +55,48 @@ public class Clip_and_park extends LinearOpMode {
                           armMotor.getCurrentPosition());
         telemetry.update();
         
-        clawServo.setPosition(0.04);
+        clawServo.setPosition(0);
         
         waitForStart();
         
-        // Hand Servo moves hand vertically
         handServo.setPosition(0.65);
-        
-        
-        // Moves arm to horizontal bar height
         encoderDrive(0.06, 0.2, 0.2, 0.4);
-        moveArm(0.88, 13.5, 1.55);
-        //Moves drive-train
+        moveArm(0.92, 13.6, 1.55);
         encoderDrive(0.06, 1.8, 1.8, 1.7);
-        sleep(1000);
-        // Following section of code for adjusting claw height before clipping. Fiddle
-        //extendMotor.setPower(0.3);
-        //sleep(200);
-        //extendMotor.setPower(0);
-        moveArm(0.9, -7, 1.5);
-        // Opens claw, 0 being base
+        sleep(250);
+        moveArm(0.8, -8, 2.8);
+        sleep(250);
         clawServo.setPosition(0.23);
-        // Moves robot back(Slightly)
-        encoderDrive(0.04, -1, -1, 1.2);
+        encoderDrive(0.08, -2, -2, 1.4);
+        moveArm(0.6, -10, 2);
+        encoderDrive(0.083, 0.9, -0.9, 1.4);
         sleep(1500);
-        moveArm(0.6, -5, 1.55);
-        // Turn the robot
-        encoderDrive(0.07, 2, -2, 1.4);
-        sleep(2000);
-        encoderDrive(0.09, 1.1, 1.1, 1.5);
+        encoderDrive(0.05, 3, 3, 2);
+        sleep(250);
+        clawServo.setPosition(0);
+        sleep(250);
+        
+        encoderDrive(0.08, -0.95, -0.95, 1.4);
+        encoderDrive(0.07, -1, 1, 1.4);
+        encoderDrive(0.08, -0.5, -0.5, 1.5);
+        sleep(250);
+        handServo.setPosition(0.65);
+        encoderDrive(0.06, 0.2, 0.2, 0.4);
+        moveArm(0.92, 13.6, 1.55);
+        encoderDrive(0.06, 1.8, 1.8, 1.7);
+        sleep(250);
+        moveArm(1.8, -7.5, 2.5);
+        clawServo.setPosition(0.23);
+        encoderDrive(0.09, -2, -2, 1.4);
+        sleep(250);
+        encoderDrive(0.078, 0.9, -0.9, 1.4);
+        sleep(250);
+        encoderDrive(0.085, 0.95, 0.95, 1.5);
+        
+        
+        
+        
+        
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
@@ -109,7 +122,7 @@ public class Clip_and_park extends LinearOpMode {
 
             extendMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            sleep(250);
+            //sleep(250);
         }
     }
     public void moveArm(double speed,double liftInches,double timeoutS) {
@@ -132,7 +145,7 @@ public class Clip_and_park extends LinearOpMode {
 
             armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            sleep(250);
+            //sleep(250);
         }
     }
     public void encoderDrive(double speed,double leftInches,double rightInches,double timeoutS) {
@@ -169,7 +182,7 @@ public class Clip_and_park extends LinearOpMode {
             leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            sleep(250);
+            //sleep(250);
         }
     }
 }

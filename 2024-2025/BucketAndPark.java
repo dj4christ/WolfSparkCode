@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="Clip and Park", group="Robot")
+@Autonomous(name="BucketAndPark", group="Robot")
 
-public class Clip_and_park extends LinearOpMode {
+public class BucketAndPark extends LinearOpMode {
 
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
@@ -59,32 +59,37 @@ public class Clip_and_park extends LinearOpMode {
         
         waitForStart();
         
-        // Hand Servo moves hand vertically
-        handServo.setPosition(0.65);
-        
-        
-        // Moves arm to horizontal bar height
-        encoderDrive(0.06, 0.2, 0.2, 0.4);
-        moveArm(0.88, 13.5, 1.55);
-        //Moves drive-train
-        encoderDrive(0.06, 1.8, 1.8, 1.7);
+        handServo.setPosition(0.67);
+        encoderDrive(0.09, -3, -3, 1);
+        encoderDrive(0.03, 0.1, 0.1, 0.7);
+        moveArm(0.7, 17, 2);
+        encoderDrive(0.068, -0.5, 0.07, 1.7);
+        sleep(500);
+        extendArm(0.47, -15, 1.2);
+        sleep(250);
+        moveArm(0.3, 17, 2);
+        sleep(250);
+        armMotor.setPower(0.2);
         sleep(1000);
-        // Following section of code for adjusting claw height before clipping. Fiddle
-        //extendMotor.setPower(0.3);
-        //sleep(200);
-        //extendMotor.setPower(0);
-        moveArm(0.9, -7, 1.5);
-        // Opens claw, 0 being base
         clawServo.setPosition(0.23);
-        // Moves robot back(Slightly)
-        encoderDrive(0.04, -1, -1, 1.2);
-        sleep(1500);
-        moveArm(0.6, -5, 1.55);
-        // Turn the robot
-        encoderDrive(0.07, 2, -2, 1.4);
-        sleep(2000);
-        encoderDrive(0.09, 1.1, 1.1, 1.5);
-
+        sleep(500);
+        armMotor.setPower(0);
+        sleep(250);
+        moveArm(0.06, -6, 2);
+        sleep(250);
+        extendArm(0.47, 15, 1.2);
+        sleep(250);
+        encoderDrive(0.03, 3.3, 3.3, 1.4);
+        encoderDrive(0.06, -3, 3, 1);
+        encoderDrive(0.09, 3.3, 3.3, 1.4);
+        encoderDrive(0.05, 3, -3, 1);
+        encoderDrive(0.15, 3, 3, 1);
+        
+        sleep(250);
+        moveArm(0.4, -7, 2.1);
+        extendArm(0.35, -15, 1.2);
+        
+        
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);
