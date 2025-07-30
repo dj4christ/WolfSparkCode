@@ -1,6 +1,7 @@
 package org.firstinspires.ftc;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -26,6 +27,12 @@ public class MecanumWheelsTest extends LinearOpMode {
         DcMotor leftBackDrive = hardwareMap.dcMotor.get("left_back");
         DcMotor rightFrontDrive = hardwareMap.dcMotor.get("right_front");
         DcMotor rightBackDrive = hardwareMap.dcMotor.get("right_back");
+        
+        DcMotor armMotor = hardwareMap.get(DcMotor.class, "arm_motor");
+        DcMotor extenderMotor = hardwareMap.get(DcMotor.class, "extension_motor");
+        
+        Servo clawServo = hardwareMap.get(Servo.class, "claw_servo");
+        Servo handServo = hardwareMap.get(Servo.class, "hand_servo");
 
         // Set motor directions
         // You may need to adjust these for your particular robot
@@ -33,6 +40,9 @@ public class MecanumWheelsTest extends LinearOpMode {
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+        
+        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        extenderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -45,6 +55,7 @@ public class MecanumWheelsTest extends LinearOpMode {
         // Any code in this loop runs REPEATEDLY until the driver presses STOP
         while (opModeIsActive()) {
             double max;
+            
 
             // Left joystick to go forward & strafe, and right joystick to rotate.
             double axial = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
@@ -98,6 +109,28 @@ public class MecanumWheelsTest extends LinearOpMode {
             rightFrontDrive.setPower(rightFrontPower/multiplier);
             leftBackDrive.setPower(leftBackPower/multiplier);
             rightBackDrive.setPower(rightBackPower/multiplier);
+            
+            double armPower = -gamepad2.left_stick_y / 1.5;
+            double extendorPower = gamepad2.right_stick_y / 1.7;
+            
+            armMotor.setPower(armPower);
+            extenderMotor.setPower(extendorPower);
+            
+            
+            if(gamepad2.left_trigger >= 0.5 || gamepad2.dpad_down) {
+                clawServo.setPosition(0.88);
+            } else if(gamepad2.right_trigger >= 0.5 || gamepad2.dpad_up) {
+                clawServo.setPosition(0.65);
+            }
+            if(gamepad2.left_bumper) {
+                clawServo.setPosition(0.15);
+            }
+            
+            if(gamepad2.left_stick_button) {
+                handServo.setPosition(0.33);
+            } else if(gamepad2.right_stick_button) {
+                handServo.setPosition(0.67);
+            }
             
             // Show the elapsed game time and wheel power.
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
