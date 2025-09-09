@@ -61,37 +61,41 @@ public class TwoClipWithoutFetch extends LinearOpMode {
         
         handServo.setPosition(0.65);
         encoderDrive(0.06, 0.2, 0.2, 0.4);
-        moveArm(0.92, 13.6, 1.55);
+        moveArm(0.93, 13.5, 1.55);
         encoderDrive(0.06, 1.8, 1.8, 1.7);
         sleep(250);
-        moveArm(0.8, -8, 2.8);
-        sleep(250);
+        moveArm(0.9, -7, 1.5);
         clawServo.setPosition(0.23);
-        encoderDrive(0.08, -2, -2, 1.4);
-        moveArm(0.6, -10, 2);
-        encoderDrive(0.083, 0.9, -0.9, 1.4);
-        sleep(1500);
-        encoderDrive(0.05, 3, 3, 2);
+        
+        encoderDrive(0.07, -3, -3, 1.5);
+        encoderDrive(0.052, 0.9, -0.9, 1.4);
         sleep(250);
+        moveArm(0.8, -8, 1.2);
+        encoderDrive(0.053, 3, 3, 1.95);
+        sleep(250);
+        extendMotor.setPower(0.13);
+        encoderDrive(0.05, 3, 3, 0.8);
         clawServo.setPosition(0);
+        extendMotor.setPower(0);
         sleep(250);
         
-        encoderDrive(0.08, -0.95, -0.95, 1.4);
-        encoderDrive(0.07, -1, 1, 1.4);
-        encoderDrive(0.08, -0.5, -0.5, 1.5);
+        encoderDrive(0.09, -0.95, -0.95, 1.4);
         sleep(250);
+        encoderDrive(0.12, -2.2, 2.2, 1.5);
+        encoderDrive(0.08, -0.5, -0.5, 1.5);
         handServo.setPosition(0.65);
         encoderDrive(0.06, 0.2, 0.2, 0.4);
-        moveArm(0.92, 13.6, 1.55);
+        extendArm(0.1, 4.2, 1.25);
+        moveArm(0.9, 13, 2.7);
         encoderDrive(0.06, 1.8, 1.8, 1.7);
         sleep(250);
         moveArm(1.8, -7.5, 2.5);
         clawServo.setPosition(0.23);
-        encoderDrive(0.09, -2, -2, 1.4);
-        sleep(250);
-        encoderDrive(0.078, 0.9, -0.9, 1.4);
-        sleep(250);
-        encoderDrive(0.085, 0.95, 0.95, 1.5);
+        encoderDrive(0.08, -2, -2, 1.35);
+        sleep(150);
+        encoderDrive(0.068, 0.9, -0.9, 1.3);
+        sleep(150);
+        encoderDrive(0.09, 0.95, 0.95, 1.5);
         
         
         

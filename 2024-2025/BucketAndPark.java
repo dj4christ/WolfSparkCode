@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="BucketAndPark", group="Robot")
 
 public class BucketAndPark extends LinearOpMode {
- 
+
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor armMotor = null;
@@ -69,11 +69,13 @@ public class BucketAndPark extends LinearOpMode {
         sleep(250);
         moveArm(0.3, 17, 2);
         sleep(250);
+        extendMotor.setPower(-0.2);
         armMotor.setPower(0.2);
         sleep(1000);
         clawServo.setPosition(0.23);
         sleep(500);
         armMotor.setPower(0);
+        extendMotor.setPower(0);
         sleep(250);
         moveArm(0.06, -6, 2);
         sleep(250);
@@ -81,9 +83,9 @@ public class BucketAndPark extends LinearOpMode {
         sleep(250);
         encoderDrive(0.03, 3.3, 3.3, 1.4);
         encoderDrive(0.06, -3, 3, 1);
-        encoderDrive(0.09, 3.3, 3.3, 1.4);
-        encoderDrive(0.05, 3, -3, 1);
-        encoderDrive(0.15, 3, 3, 1);
+        encoderDrive(0.1, 3.3, 3.3, 1.45);
+        //encoderDrive(0.05, 3, -3, 1);
+        //encoderDrive(0.15, 3, 3, 1);
         
         sleep(250);
         moveArm(0.4, -7, 2.1);

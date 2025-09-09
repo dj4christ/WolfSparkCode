@@ -14,7 +14,7 @@ public class DriveTrain extends LinearOpMode {
         // Initialize the hardware
         // The strings here must correspond to the names of the motors in your robot config
         DcMotor leftFrontDrive = hardwareMap.dcMotor.get("left_front");
-        DcMotor leftBackDrive = hardwareMap.dcMotor.get("left_back");       
+        DcMotor leftBackDrive = hardwareMap.dcMotor.get("left_back");
         DcMotor rightFrontDrive = hardwareMap.dcMotor.get("right_front");
         DcMotor rightBackDrive = hardwareMap.dcMotor.get("right_back");
 
