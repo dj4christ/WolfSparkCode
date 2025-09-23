@@ -14,6 +14,7 @@ public class AprilTagExample extends LinearOpMode
     static final double FY = 578.272;
     static final double CX = 402.145;
     static final double CY = 221.506;
+    ArrayList<String> order = new ArrayList<>();
 
     double tagsize = 0.166; // meters (FTC tags are ~16.6 cm)
 
@@ -50,6 +51,22 @@ public class AprilTagExample extends LinearOpMode
                 for(AprilTagDetection tag : detections)
                 {
                     telemetry.addData("Detected tag ID", tag.id);
+                    if (tag.id == 21) {
+                        order.clear();
+                        order.add("g");
+                        order.add("p");
+                        order.add("p");
+                    } else if (tag.id == 22) {
+                        order.clear();
+                        order.add("p");
+                        order.add("g");
+                        order.add("p");
+                    } else if (tag.id == 23) {
+                        order.clear();
+                        order.add("p");
+                        order.add("p");
+                        order.add("g");
+                    }
                     telemetry.addData("Translation X", tag.pose.x);
                     telemetry.addData("Translation Y", tag.pose.y);
                     telemetry.addData("Translation Z", tag.pose.z);
