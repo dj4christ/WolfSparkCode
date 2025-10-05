@@ -1,75 +1,77 @@
-import cv2
+import cv2, os
 import numpy as np
 
-t = 50
+t = 10
 m = 127
 rp, gp, bp = 155, 43, 209
 rg, gg, bg = 60, 176, 67
 
 width, height = 640, 480  # use safe default
 
-
 cap = cv2.VideoCapture(0)
 
 while True:
-    ar, ag, ab = 127, 127, 127
-    count = 0
     ret, img = cap.read()
     if not ret:
         break
 
     ab, ag, ar, _ = cv2.mean(img)
 
-    # for i in range(0, img.shape[0]):
-    #     for j in range(0, img.shape[1]):
-    #         b, g, r = img[i, j]
+    h, w, _ = img.shape
+    b, g, r= img[round(h/2), round(w/2)]
 
-    #         count += 1
-    #         ar += r
-    #         ag += g
-    #         ab += b
+    b, g, r = round(b), round(g), round(r)
 
-    b, g, r= img[round(height/2), round(width/2)]
-    
-    color = (r, g, b)
+    color = (b, g, r)
     solid_img = np.full((height, width, 3), color, dtype=np.uint8)
     cv2.imshow("Middle Color", solid_img)
 
-    # print(f"{r} {g} {b}", end="\r")
-
-    # if ab >= m:
-    #     b = round(b-(ab-m))
-    # else:
-    #     b = round(b+(m+ab))
-    
-    # if ar >= m:
-    #     r = round(r-(ar-m))
-    # else:
-    #     r = round(r+(m+ar))
-    
-    # if ag >= m:
-    #     g = round(g-(ag-m))
-    # else:
-    #     g = round(g+(m+ag))
-
-
-    # color = (ar, ag, ab)
-    # solid_img = np.full((height, width, 3), color, dtype=np.uint8)
-    # cv2.imshow("Lighting", solid_img)
-
     center_y, center_x = height // 2, width // 2
     img[center_y, center_x] = (0, 0, 255)
-    cv2.imshow("preview", img)
+    cv2.rectangle(img, (w//2-5, h//2-5), (w//2+5, h//2+5), (0, 255, 0), 1)
+    cv2.imshow("Preview", img)
 
-    if g > r-t and g > b-t:
+    os.system("cls")
+    print(f"{r} {g} {b}", end=" ")
+
+    if g > r+t and g > b+t:
         print("green")
-    elif r > g-t and r > b-t:
+    elif r > g+t and r > b+t:
         print("red")
-    elif b > r-t and b > g-t:
+    elif b > r+t and b > g+t:
         print("blue")
     else:
         print("none")
     
+    if (r <= rp+t and r >= rp-t) and (g <= gp+t and g >= gp-t) and (b <= bp+t and b >= bp-t):
+        print("Purple")
+    if (r <= rg+t and r >= rg-t) and (g <= gg+t and g >= gg-t) and (b <= bg+t and b >= bg-t):
+        print("Green")
+
+    # -250 230
+
+    # if ab >= m:
+    #     b = round(b-((ab-b)/2))
+    # else:
+    #     b = round(b+((b-ab)/2))
+    
+    # if ar >= m:
+    #     r = round(r-((ar-r)/2))
+    # else:
+    #     r = round(r+((r-ar)/2))
+    
+    # if ag >= m:
+    #     g = round(g-(ag-g)/2)
+    # else:
+    #     g = round(g+(g-ag)/2)
+    
+    # color = (b, g, r)
+    # solid_img = np.full((height, width, 3), color, dtype=np.uint8)
+    # cv2.imshow("Actual Color", solid_img)
+
+    # color = (ab, ag, ar)
+    # solid_img = np.full((height, width, 3), color, dtype=np.uint8)
+    # cv2.imshow("Lighting", solid_img)
 
     if cv2.waitKey(1) & 0xFF == ord("q"):
         break
