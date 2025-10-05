@@ -1,12 +1,11 @@
 import cv2, os
 import numpy as np
 
-t = 10
+t = 30
+t2 = 20
 m = 127
-rp, gp, bp = 155, 43, 209
+rp, gp, bp = 155, 100, 209
 rg, gg, bg = 60, 176, 67
-
-width, height = 640, 480  # use safe default
 
 cap = cv2.VideoCapture(0)
 
@@ -23,10 +22,10 @@ while True:
     b, g, r = round(b), round(g), round(r)
 
     color = (b, g, r)
-    solid_img = np.full((height, width, 3), color, dtype=np.uint8)
+    solid_img = np.full((h, w, 3), color, dtype=np.uint8)
     cv2.imshow("Middle Color", solid_img)
 
-    center_y, center_x = height // 2, width // 2
+    center_y, center_x = h // 2, w // 2
     img[center_y, center_x] = (0, 0, 255)
     cv2.rectangle(img, (w//2-5, h//2-5), (w//2+5, h//2+5), (0, 255, 0), 1)
     cv2.imshow("Preview", img)
@@ -43,10 +42,12 @@ while True:
     else:
         print("none")
     
-    if (r <= rp+t and r >= rp-t) and (g <= gp+t and g >= gp-t) and (b <= bp+t and b >= bp-t):
+    if (r <= rp+t2 and r >= rp-t2) and (g <= gp+t2 and g >= gp-t2) and (b <= bp+t2 and b >= bp-t2):
         print("Purple")
-    if (r <= rg+t and r >= rg-t) and (g <= gg+t and g >= gg-t) and (b <= bg+t and b >= bg-t):
+        break
+    elif (r <= rg+t2 and r >= rg-t2) and (g <= gg+t2 and g >= gg-t2) and (b <= bg+t2 and b >= bg-t2):
         print("Green")
+        break
 
     # -250 230
 
