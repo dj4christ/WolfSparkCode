@@ -17,6 +17,7 @@ while True:
     ab, ag, ar, _ = cv2.mean(img)
 
     h, w, _ = img.shape
+    print(w, h)
     b, g, r= img[round(h/2), round(w/2)]
 
     b, g, r = round(b), round(g), round(r)
